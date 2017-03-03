@@ -24,12 +24,13 @@
         <java.version>1.8</java.version>
 
         <!-- OpenAPI Specification -->
-        <swagger.codegen.version>2.2.0</swagger.codegen.version>
+        <swagger.codegen.version>2.2.1</swagger.codegen.version>
         <swagger.gencode.packages.version>1.5.12</swagger.gencode.packages.version>
         <swagger.gencode.glassfish.version>2.25.1</swagger.gencode.glassfish.version>
         <swagger-spec.artifactId>provider-api</swagger-spec.artifactId>
         <swagger-spec.api-package>com.gagaovergigs.ms.provider.api</swagger-spec.api-package>
         <swagger-spec.model-package>com.gagaovergigs.ms.provider.api.models</swagger-spec.model-package>
+        <swagger-spec.invoker-package>com.gagaovergigs.ms.provider.api.util</swagger-spec.invoker-package>
     </properties>
 
     <dependencies>
@@ -79,70 +80,28 @@
 
             <!-- Open API Specification -->
             <plugin>
-                <dependencies>
-                    <dependency>
-                        <groupId>io.swagger</groupId>
-                        <artifactId>swagger-codegen-cli</artifactId>
-                        <version>${swagger.codegen.version}</version>
-                    </dependency>
-                </dependencies>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.5.0</version>
-                <configuration>
-                    <killAfter>-1</killAfter>
-                    <includePluginDependencies>true</includePluginDependencies>
-                </configuration>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>${swagger.codegen.version}</version>
                 <executions>
                     <execution>
-                        <id>swagger-generate-server-code</id>
-                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>java</goal>
+                            <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <mainClass>io.swagger.codegen.SwaggerCodegen</mainClass>
-                            <arguments>
-                                <argument>generate</argument>
-                                <argument>-i</argument>
-                                <argument>
-                                    ${project.basedir}/src/main/resources/openapi/${swagger-spec.artifactId}.yaml
-                                </argument>
-                                <argument>-l</argument>
-                                <argument>jaxrs</argument>
-                                <argument>-o</argument>
-                                <argument>${project.build.directory}/generated-sources/java</argument>
-                                <argument>--api-package</argument>
-                                <argument>${swagger-spec.api-package}</argument>
-                                <argument>--model-package</argument>
-                                <argument>${swagger-spec.model-package}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.10</version>
-                <executions>
-                    <execution>
-                        <id>add-generated-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/java/src/gen/java</source>
-                                <source>${project.build.directory}/generated-sources/java/src/main/java</source>
-                            </sources>
+                            <inputSpec>src/main/resources/openapi/${swagger-spec.artifactId}.yaml</inputSpec>
+                            <language>jaxrs</language>
+                            <apiPackage>${swagger-spec.api-package}</apiPackage>
+                            <modelPackage>${swagger-spec.model-package}</modelPackage>
+                            <invokerPackage>${swagger-spec.invoker-package}</invokerPackage>
+                            <configOptions>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                            </configOptions>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-
 
 </project>

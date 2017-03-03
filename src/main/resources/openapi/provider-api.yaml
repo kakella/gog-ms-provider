@@ -1,8 +1,8 @@
-swagger: '2.0'
+swagger: "2.0"
 
 info:
-  version: "1.0.0"
-  title: GagaOverGigs - API for provider MS
+  version: "0.0.1"
+  title: GagaOverGigs - API for `Provider` MS
   description: |
     Operations related to the `provider` resource
   license:
@@ -22,9 +22,9 @@ produces:
 host: api.gog.com
 
 schemes:
-- https
+- http
 
-basePath: /gog/api
+basePath: /api
 
 #
 # Resources
@@ -70,7 +70,7 @@ paths:
 parameters:
 
   provider-id:
-    name: provider-id
+    name: providerId
     in: path
     description: |
       The ID of the Provider
@@ -99,20 +99,18 @@ definitions:
         description: |
           The ID of the resource
         type: string
-      first-name:
-        type: string
-      last-name:
-        type: string
       type:
         description: |
           The type of the provider - henna artist, face painter etc.
         type: string
-
+      firstName:
+        type: string
+      lastName:
+        type: string
 
 #
 # Common models
 #
-
   v1.PatchElement:
     description: |
       The 'PatchElement' object

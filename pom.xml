@@ -23,10 +23,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
-        <!-- OpenAPI Specification -->
-        <swagger.codegen.version>2.2.1</swagger.codegen.version>
-        <swagger.gencode.packages.version>1.5.12</swagger.gencode.packages.version>
-        <swagger.gencode.glassfish.version>2.25.1</swagger.gencode.glassfish.version>
+        <!-- OpenAPI Specification dependency versions -->
+        <swagger.codegen.version>2.2.2</swagger.codegen.version>
+        <swagger.codegen.springfox.version>2.6.1</swagger.codegen.springfox.version>
+        <swagger.codegen.jackson.version>2.8.6</swagger.codegen.jackson.version>
+        <swagger.codegen.joda.version>2.9.7</swagger.codegen.joda.version>
+
+        <!-- OpenAPI Specification configuration -->
         <swagger-spec.artifactId>provider-api</swagger-spec.artifactId>
         <swagger-spec.api-package>com.gagaovergigs.ms.provider.api</swagger-spec.api-package>
         <swagger-spec.model-package>com.gagaovergigs.ms.provider.api.models</swagger-spec.model-package>
@@ -36,31 +39,46 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-couchbase</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jersey</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-security</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.session</groupId>-->
+        <!--<artifactId>spring-session</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-data-couchbase</artifactId>-->
+        <!--</dependency>-->
 
         <!-- OpenAPI Specification -->
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-jersey-jaxrs</artifactId>
-            <version>${swagger.gencode.packages.version}</version>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.codegen.springfox.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-multipart</artifactId>
-            <version>${swagger.gencode.glassfish.version}</version>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.codegen.springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+            <version>${swagger.codegen.jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${swagger.codegen.jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${swagger.codegen.joda.version}</version>
         </dependency>
 
         <!-- Test dependencies -->
@@ -90,7 +108,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>src/main/resources/openapi/${swagger-spec.artifactId}.yaml</inputSpec>
-                            <language>jaxrs</language>
+                            <language>spring</language>
                             <apiPackage>${swagger-spec.api-package}</apiPackage>
                             <modelPackage>${swagger-spec.model-package}</modelPackage>
                             <invokerPackage>${swagger-spec.invoker-package}</invokerPackage>

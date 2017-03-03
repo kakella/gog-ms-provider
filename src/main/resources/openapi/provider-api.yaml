@@ -1,0 +1,199 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: GagaOverGigs - API for provider MS
+  description: |
+    Operations related to the `provider` resource
+  license:
+    name: ""
+    url: ""
+  contact:
+    name: Ksheerasagar Akella
+    url: ""
+    email: ksheerasagar.akella@gmail.com
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+# Dummy host
+host: api.gog.com
+
+schemes:
+- https
+
+basePath: /gog/api
+
+#
+# Resources
+#
+paths:
+
+  /v1/provider:
+
+    post:
+      tags:
+      - "Provider"
+      operationId: createResource
+      description: |
+        Create the resource
+      parameters:
+      - in: body
+        name: provider
+        description: |
+          The details of the resource to be created
+        required: true
+        schema:
+          $ref: "#/definitions/v1.Provider"
+      responses:
+        201:
+          description: |
+            *OK* - The resource was created successfully
+          schema:
+            $ref: "#/definitions/v1.Provider"
+        400:
+          $ref: "#/responses/400-BadRequest"
+        401:
+          $ref: "#/responses/401-Unauthorized"
+        403:
+          $ref: "#/responses/403-Forbidden"
+        404:
+          $ref: "#/responses/404-NotFound"
+        default:
+          $ref: "#/responses/500-InternalServerError"
+
+#
+# Parameters
+#
+parameters:
+
+  provider-id:
+    name: provider-id
+    in: path
+    description: |
+      The ID of the Provider
+    required: true
+    type: string
+
+#
+# Standard REST query parameters
+#
+
+
+#
+# Definitions
+#
+definitions:
+
+  v1.Provider:
+    description: |
+      A single Provider resource
+    type: object
+    required:
+    - id
+    - type
+    properties:
+      id:
+        description: |
+          The ID of the resource
+        type: string
+      first-name:
+        type: string
+      last-name:
+        type: string
+      type:
+        description: |
+          The type of the provider - henna artist, face painter etc.
+        type: string
+
+
+#
+# Common models
+#
+
+  v1.PatchElement:
+    description: |
+      The 'PatchElement' object
+    properties:
+      op:
+        description: |
+          The operation of this 'PatchElement' ('replace' or 'add')
+        type: string
+      path:
+        type: string
+        description: |
+          The path of this 'PatchElement' ('/status' or '/notes' or '/name' or '/activationStatus' or
+          '/description')
+      value:
+        description: |
+          The value of this 'PatchElement'
+        type: object
+
+  v1.ErrorResponse:
+    type: object
+    description: |
+      The standard error response
+    properties:
+      link:
+        type: string
+        format: url
+        description: |
+          The href to the item
+        readOnly: true
+      rel:
+        type: string
+        description: |
+          The relation type for the item
+        readOnly: true
+        default: help
+      code:
+        description: |
+          The code associated with the error
+        readOnly: true
+        type: integer
+      message:
+        description: |
+          The message associated with the error
+        readOnly: true
+        type: string
+
+#
+# Responses
+#
+responses:
+  400-BadRequest:
+    description: |
+      *Bad Request* - client has sent malformed request:
+      missing mandatory query parameters, invalid value
+      in query parameters, backend exception etc.
+    schema:
+      $ref: "#/definitions/v1.ErrorResponse"
+
+  401-Unauthorized:
+    description: |
+      *Unauthorized* - the server rejected the client's credentials
+    schema:
+      $ref: "#/definitions/v1.ErrorResponse"
+
+  403-Forbidden:
+    description: |
+      *Forbidden* - server rejected client request operation
+      that is outside of the the permitted scope.
+    schema:
+      $ref: "#/definitions/v1.ErrorResponse"
+
+  404-NotFound:
+    description: |
+      *Not Found* - server has not found the requested URI:
+      missing path parameters, invalid web resource etc.
+    schema:
+      $ref: "#/definitions/v1.ErrorResponse"
+
+  500-InternalServerError:
+    description: |
+      *Internal Server Error* - server failed in handling the
+      client request.
+    schema:
+      $ref: "#/definitions/v1.ErrorResponse"

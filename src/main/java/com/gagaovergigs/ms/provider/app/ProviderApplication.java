@@ -1,4 +1,4 @@
-package com.gagaovergigs.ms;
+package com.gagaovergigs.ms.provider.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

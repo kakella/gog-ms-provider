@@ -178,7 +178,7 @@ responses:
   403-Forbidden:
     description: |
       *Forbidden* - server rejected client request operation
-      that is outside of the the permitted scope.
+      that is outside of the permitted scope.
     schema:
       $ref: "#/definitions/v1.ErrorResponse"
 

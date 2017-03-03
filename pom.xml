@@ -34,6 +34,9 @@
         <swagger-spec.api-package>com.gagaovergigs.ms.provider.api</swagger-spec.api-package>
         <swagger-spec.model-package>com.gagaovergigs.ms.provider.api.models</swagger-spec.model-package>
         <swagger-spec.invoker-package>com.gagaovergigs.ms.provider.api.util</swagger-spec.invoker-package>
+
+        <!-- JRebel -->
+        <version.jrebel-maven-plugin>1.1.6</version.jrebel-maven-plugin>
     </properties>
 
     <dependencies>
@@ -114,12 +117,40 @@
                             <invokerPackage>${swagger-spec.invoker-package}</invokerPackage>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
+                                <basePackage>com.gagaovergigs.ms.provider</basePackage>
+                                <configPackage>com.gagaovergigs.ms.provider.docs</configPackage>
+                                <delegatePattern>true</delegatePattern>
                             </configOptions>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- JRebel -->
+            <plugin>
+                <groupId>org.zeroturnaround</groupId>
+                <artifactId>jrebel-maven-plugin</artifactId>
+            </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <!-- JRebel -->
+                <plugin>
+                    <groupId>org.zeroturnaround</groupId>
+                    <artifactId>jrebel-maven-plugin</artifactId>
+                    <version>${version.jrebel-maven-plugin}</version>
+                    <executions>
+                        <execution>
+                            <id>generate-rebel-xml</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>

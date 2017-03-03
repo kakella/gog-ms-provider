@@ -1,4 +1,4 @@
-package io.swagger.test;
+package com.gagaovergigs.ms.provider.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

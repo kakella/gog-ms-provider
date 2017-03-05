@@ -89,7 +89,7 @@ definitions:
 
   v1.Provider:
     description: |
-      A single Provider resource
+      A single `Provider` resource
     type: object
     required:
     - email
@@ -101,7 +101,7 @@ definitions:
         type: string
       providerType:
         description: |
-          The type of the provider - henna artist, face painter etc.
+          The type of the provider; currently only valid value is 'HENNA_ARTIST'
         type: string
       firstName:
         type: string

@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProviderResourceEntityMapper {
+
+    private static final String HENNA_ARTIST = "HENNA_ARTIST";
+
     public Provider resourceToEntity(V1Provider resource) throws InvalidProviderTypeException {
         Provider.ProviderType providerType = this.typeStringToEnum(resource.getProviderType());
 
@@ -19,7 +22,7 @@ public class ProviderResourceEntityMapper {
 
     private Provider.ProviderType typeStringToEnum(String type) throws InvalidProviderTypeException {
         switch (type) {
-            case "henna-artist":
+            case HENNA_ARTIST:
                 return Provider.ProviderType.HENNA_ARTIST;
             default:
                 throw new InvalidProviderTypeException(type);

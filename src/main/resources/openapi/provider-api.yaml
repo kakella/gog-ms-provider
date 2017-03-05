@@ -48,7 +48,7 @@ paths:
         schema:
           $ref: "#/definitions/v1.Provider"
       responses:
-        201:
+        200:
           description: |
             *OK* - The resource was created successfully
           schema:
@@ -92,12 +92,12 @@ definitions:
       A single Provider resource
     type: object
     required:
-    - id
+    - email
     - type
     properties:
-      id:
+      email:
         description: |
-          The ID of the resource
+          The ID of the resource. We use the provider's email address as the ID.
         type: string
       type:
         description: |

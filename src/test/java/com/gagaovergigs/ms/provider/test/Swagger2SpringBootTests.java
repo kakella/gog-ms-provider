@@ -40,7 +40,7 @@ public class Swagger2SpringBootTests {
         providerResource.setEmail("a@b.com");
         providerResource.setFirstName("F");
         providerResource.setLastName("L");
-        providerResource.setProviderType("henna-artist");
+        providerResource.setProviderType("HENNA_ARTIST");
 
         try {
             providerEntity = mapper.resourceToEntity(providerResource);

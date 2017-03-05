@@ -3,6 +3,7 @@ package com.gagaovergigs.ms.provider.api;
 import com.gagaovergigs.ms.provider.api.models.V1ErrorResponse;
 import com.gagaovergigs.ms.provider.api.models.V1Provider;
 import com.gagaovergigs.ms.provider.exceptions.InvalidProviderTypeException;
+import com.gagaovergigs.ms.provider.exceptions.ProviderAlreadyExistsException;
 import com.gagaovergigs.ms.provider.mappers.ProviderResourceEntityMapper;
 import com.gagaovergigs.ms.provider.services.NoSQLService;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import javax.validation.ConstraintViolationException;
 
 @Component
 public class ProviderDelegateImpl implements V1ApiDelegate {
@@ -31,7 +34,7 @@ public class ProviderDelegateImpl implements V1ApiDelegate {
 
         try {
             persistenceService.insertProvider(providerResourceEntityMapper.resourceToEntity(provider));
-        } catch (InvalidProviderTypeException e) {
+        } catch (InvalidProviderTypeException | ProviderAlreadyExistsException | ConstraintViolationException e) {
             LOGGER.error(e.getMessage());
             LOGGER.error(e.getStackTrace().toString());
 

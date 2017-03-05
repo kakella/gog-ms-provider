@@ -99,7 +99,7 @@ definitions:
         description: |
           The ID of the resource. We use the provider's email address as the ID.
         type: string
-      type:
+      providerType:
         description: |
           The type of the provider - henna artist, face painter etc.
         type: string

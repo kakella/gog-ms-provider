@@ -1,6 +1,7 @@
-package com.gagaovergigs.ms.provider.persistence.jpa.entities;
+package com.gagaovergigs.ms.provider.persistence.springdata.entities;
 
 import com.couchbase.client.java.repository.annotation.Field;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.couchbase.core.mapping.Document;
@@ -12,13 +13,17 @@ public class Provider {
     @Field
     @ReadOnlyProperty
     private static final String docType = "provider";
+
     @Id
     private String id;
+
     @Field
     @NotNull
     private ProviderType providerType;
 
     @Field
+    @NotNull
+    @Email
     private String email;
 
     @Field
@@ -78,7 +83,6 @@ public class Provider {
     }
 
     public enum ProviderType {
-        HENNA_ARTIST,
-        FACE_PAINTER
+        HENNA_ARTIST
     }
 }

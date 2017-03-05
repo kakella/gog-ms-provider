@@ -2,16 +2,16 @@ package com.gagaovergigs.ms.provider.mappers;
 
 import com.gagaovergigs.ms.provider.api.models.V1Provider;
 import com.gagaovergigs.ms.provider.exceptions.InvalidProviderTypeException;
-import com.gagaovergigs.ms.provider.persistence.jpa.entities.Provider;
+import com.gagaovergigs.ms.provider.persistence.springdata.entities.Provider;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProviderResourceEntityMapper {
     public Provider resourceToEntity(V1Provider resource) throws InvalidProviderTypeException {
-        Provider.ProviderType type = this.typeStringToEnum(resource.getType());
+        Provider.ProviderType providerType = this.typeStringToEnum(resource.getProviderType());
 
         return new Provider(
-                type,
+                providerType,
                 resource.getEmail(),
                 resource.getFirstName(),
                 resource.getLastName());
@@ -21,8 +21,6 @@ public class ProviderResourceEntityMapper {
         switch (type) {
             case "henna-artist":
                 return Provider.ProviderType.HENNA_ARTIST;
-            case "face-painter":
-                return Provider.ProviderType.FACE_PAINTER;
             default:
                 throw new InvalidProviderTypeException(type);
         }

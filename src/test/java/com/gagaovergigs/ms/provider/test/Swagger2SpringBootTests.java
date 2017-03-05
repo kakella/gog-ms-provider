@@ -3,7 +3,7 @@ package com.gagaovergigs.ms.provider.test;
 import com.gagaovergigs.ms.provider.api.models.V1Provider;
 import com.gagaovergigs.ms.provider.exceptions.InvalidProviderTypeException;
 import com.gagaovergigs.ms.provider.mappers.ProviderResourceEntityMapper;
-import com.gagaovergigs.ms.provider.persistence.jpa.entities.Provider;
+import com.gagaovergigs.ms.provider.persistence.springdata.entities.Provider;
 import com.gagaovergigs.ms.provider.services.NoSQLService;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -29,40 +31,81 @@ public class Swagger2SpringBootTests {
     @Autowired
     private ProviderResourceEntityMapper mapper;
 
-    private V1Provider resource;
-    private Provider entity;
+    private V1Provider providerResource;
+    private Provider providerEntity;
 
     @Before
     public void init() {
-        resource = new V1Provider();
-        resource.setEmail("a@b.com");
-        resource.setFirstName("F");
-        resource.setLastName("L");
-        resource.setType("henna-artist");
+        providerResource = new V1Provider();
+        providerResource.setEmail("a@b.com");
+        providerResource.setFirstName("F");
+        providerResource.setLastName("L");
+        providerResource.setProviderType("henna-artist");
 
         try {
-            entity = mapper.resourceToEntity(resource);
+            providerEntity = mapper.resourceToEntity(providerResource);
         } catch (InvalidProviderTypeException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void testPOSTRequest() {
-        persistenceService.deleteById(entity.getEmail());
+    public void testPOSTRequest_documentDoesNotExist() {
+        persistenceService.deleteById(providerEntity.getEmail());
 
         V1Provider response = this.restTemplate.postForObject(
                 "/v1/provider",
-                resource,
+                providerResource,
                 V1Provider.class);
 
-        assertThat(response).isEqualToComparingFieldByField(resource);
+        assertThat(response).isEqualToComparingFieldByField(providerResource);
     }
 
     @Test
-    public void testPOSTedData() {
-        Provider entity = persistenceService.getById(this.entity.getEmail());
-        assertThat(entity).isEqualToComparingFieldByField(this.entity);
+    public void testPOSTRequest_documentAlreadyExists() {
+        ResponseEntity<V1Provider> response = this.restTemplate.postForEntity(
+                "/v1/provider",
+                providerResource,
+                V1Provider.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void testPOSTRequest_invalidProviderType() {
+        providerResource.setEmail("c@d.com");
+        providerResource.setProviderType("dummy");
+        ResponseEntity<V1Provider> response = this.restTemplate.postForEntity(
+                "/v1/provider",
+                providerResource,
+                V1Provider.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void testPOSTRequest_invalidEmailAddress() {
+        providerResource.setEmail("ab.com");
+        ResponseEntity<V1Provider> response = this.restTemplate.postForEntity(
+                "/v1/provider",
+                providerResource,
+                V1Provider.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void testPOSTRequest_verifyDataPersisted() {
+        Provider entity = persistenceService.getById(this.providerEntity.getEmail());
+        assertThat(entity).isEqualToComparingFieldByField(this.providerEntity);
+        assertThat(entity.getId()).isEqualTo("provider:" + entity.getEmail());
+        assertThat(entity.getDocType()).isEqualTo("provider");
+    }
+
+    @Test
+    public void testEntityKeyHandling() {
+        this.providerEntity.setEmail("x@y.com");
+        assertThat(this.providerEntity.getId()).isEqualTo("provider:" + this.providerEntity.getEmail());
     }
 
 }
